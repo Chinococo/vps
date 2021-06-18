@@ -17,6 +17,7 @@ public class App {
         //OK//System.out.println(new function().get_exchangeinfo());
         //OK//System.out.println(new function().get_recent_trades("LTCBTC",1));
         //OK//System.out.println(new function().get_kline("LTCBTC","1m",0,0,10));
+        //OK//System.out.println(new function().get_price());
     }
 
 

@@ -91,6 +91,14 @@ public class function {
         return new http_service(url,"GET",pram).sync_GET();
 
     }
+    /*
+    取得現在價格
+    */
+    public String get_price()
+    {
+        String url = "https://api.binance.com/api/v1/ticker/price";
+        return new http_service(url,"GET").sync_GET();
+    }
 
 
     class timestamp

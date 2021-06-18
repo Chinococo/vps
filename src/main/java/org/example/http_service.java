@@ -67,7 +67,7 @@ public class http_service {
     }
 
     private void build_GET_pram() {
-        System.out.println(pram.toString());
+        //System.out.println(pram.toString());
         if (pram.size() == 0)
             return;
         url = url + "?" + pram.get(0).getName() + "=" + pram.get(0).getValue();
