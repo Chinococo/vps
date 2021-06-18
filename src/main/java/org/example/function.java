@@ -1,6 +1,7 @@
 package org.example;
 
 
+import com.google.gson.Gson;
 import org.apache.commons.codec.binary.Hex;
 
 import javax.crypto.Mac;
@@ -26,7 +27,12 @@ public class function {
     }
     public String get_timestamp()
     {
-        
-        return "none";
+        http_service http_service = new http_service("https://api.binance.com/api/v1/time","GET");
+        timestamp t  = new Gson().fromJson(http_service.sync_GET(),timestamp.class);
+        return t.serverTime;
+    }
+    class timestamp
+    {
+        String serverTime;
     }
 }

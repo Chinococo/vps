@@ -76,8 +76,11 @@ public class http_service {
 
     public String sync_GET()//同步請求GET指令
     {
+        System.out.println("connect with url :" +url);
+        System.out.println("melthos by GET");
         try {
             build_GET_pram();
+            System.out.println("create pram to url :"+url);
             HttpUriRequest request = new HttpGet(url);
             for (String key : header.keySet())
                 request.setHeader(key, header.get(key));
@@ -85,9 +88,9 @@ public class http_service {
                     .create()
                     .build();
             CloseableHttpResponse response = cilent.execute(request);
+            System.out.println("status code="+response.getStatusLine().getStatusCode());
             if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
                 entity = response.getEntity();
-                System.out.println(response.getStatusLine().getStatusCode());
                 if (entity != null) {
                     get_respond = EntityUtils.toString(entity, decoder);
                     return get_respond;
@@ -137,5 +140,6 @@ public class http_service {
             return null;
         }
     }
+
 
 }
