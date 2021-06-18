@@ -67,11 +67,13 @@ public class http_service {
     }
 
     private void build_GET_pram() {
+        System.out.println(pram.toString());
         if (pram.size() == 0)
             return;
-        url = url + "?" + pram.get(0).getName() + "=" + pram.get(0).getName();
+        url = url + "?" + pram.get(0).getName() + "=" + pram.get(0).getValue();
         for (int i = 1; i < pram.size(); i++)
-            url = url + "&" + pram.get(i).getName() + "=" + pram.get(i).getName();
+            url = url + "&" + pram.get(i).getName() + "=" + pram.get(i).getValue();
+        System.out.println(url);
     }
 
     public String sync_GET()//同步請求GET指令

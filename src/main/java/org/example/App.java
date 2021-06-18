@@ -12,9 +12,11 @@ public class App {
     public final String secretkey="D9r4okfmxpufNrGJ0EjdUQF3g9VQ02lgUsZwM6hhOZahb9NZogB7EDNJhkb6yXhj";
 
     public static void main(String[] args) throws IOException {
-        System.out.println(new function().get_timestamp());
-        System.out.println(new function().sha256_HMAC_signture("symbol=LTCBTC&side=BUY&type=LIMIT&timeInForce=GTC&quantity=1&price=0.1&recvWindow=5000&timestamp=1499827319559","NhqPtmdSJYdKjVHjA7PZj4Mge3R5YNiP1e3UZjInClVN65XAbvqqM6A7H5fATj0j"));
-
+        //OK//System.out.println(new function().get_timestamp());
+        //OK//System.out.println(new function().sha256_HMAC_signture("symbol=LTCBTC&side=BUY&type=LIMIT&timeInForce=GTC&quantity=1&price=0.1&recvWindow=5000&timestamp=1499827319559","NhqPtmdSJYdKjVHjA7PZj4Mge3R5YNiP1e3UZjInClVN65XAbvqqM6A7H5fATj0j"));
+        //OK//System.out.println(new function().get_exchangeinfo());
+        //OK//System.out.println(new function().get_recent_trades("LTCBTC",1));
+        //OK//System.out.println(new function().get_kline("LTCBTC","1m",0,0,10));
     }
 
 
