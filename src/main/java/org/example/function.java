@@ -18,11 +18,11 @@ import java.util.Map;
 public class function {
     /*
     製造簽名
-    message = 加密訊息=傳送出去的參數
-    secret = 密鑰
-     */
+    @parm message : 需要加密訊息傳送出去的參數
+    @parm secret  : 密鑰
+    @return  signature 簽名
+    */
     public static String sha256_HMAC_signture(String message, String secret) {
-        String hash = "";
         try {
             byte[] keyBytes = secret.getBytes(StandardCharsets.UTF_8.name()); // 把密鑰字串轉為byte[]
             Key hmacKey = new SecretKeySpec(keyBytes, "HmacSHA256"); // 建立HMAC加密用密鑰
@@ -36,10 +36,11 @@ public class function {
         }
         return "none";
     }
-    /*
-    取得時間戳記
-     */
 
+    /*
+    功能:取得時間戳記
+    @return  時間戳記
+    */
     public static String get_timestamp() {
         http_service http_service = new http_service("https://api.binance.com/api/v1/time", "GET");
         timestamp t = new Gson().fromJson(http_service.sync_GET(), timestamp.class);
@@ -47,8 +48,9 @@ public class function {
     }
 
     /*
-    取得交易訊息
-     */
+    功能:取得交易訊息
+    @return 交易訊息
+    */
     public static String get_exchangeinfo() {
         String url = "https://api.binance.com/api/v3/exchangeInfo";
         return new http_service(url, "GET").sync_GET();
@@ -56,9 +58,10 @@ public class function {
 
     /*
     取得最近交易紀錄
-    Symol = 種類
-    limit = 回傳項目上限
-     */
+    @parm Symol : 種類
+    @parm limit : 回傳項目上限
+    @return recent_trades
+    */
     public static String get_recent_trades(String symbol, int limit) {
         ArrayList<NameValuePair> pram = new ArrayList<>();
         pram.add(new BasicNameValuePair("symbol", symbol));
@@ -70,13 +73,15 @@ public class function {
 
     /*
     取得k線
-    Symol = 種類
-    interval = 時間間隔
-    StartTime = 開始時間
-    endTime = 結束時間
-    limit = 回傳項目上限
-     */
-    public static String get_kline(String symbol, String interval, long startTime, long endTime, int limit) {
+    @parm Symol     : 種類
+    @parm interval  : 時間間隔
+    @parm StartTime : 開始時間
+    @parm endTime   : 結束時間
+    @parm limit     : 回傳項目上限
+    @return k線
+    */
+    public static String get_kline(String symbol, String interval, long startTime, long endTime, int limit)
+    {
         ArrayList<NameValuePair> pram = new ArrayList<>();
         pram.add(new BasicNameValuePair("symbol", symbol));
         pram.add(new BasicNameValuePair("interval", interval + ""));
@@ -85,17 +90,32 @@ public class function {
         pram.add(new BasicNameValuePair("limit", limit + ""));
         String url = "https://api.binance.com/api/v3/klines";
         return new http_service(url, "GET", pram).sync_GET();
-
     }
 
     /*
     取得現在價格
+    @return 現在價格
     */
     public static String get_price() {
         String url = "https://api.binance.com/api/v1/ticker/price";
         return new http_service(url, "GET").sync_GET();
     }
 
+    /*
+    @parm pram 可能包括以下
+       @parm symbol          :項目
+       @parm side            :動作
+       @parm type            :
+       @parm quantity        :數量
+       @parm timeInForce"    :類型
+       @parm price           :價格
+       @parm quoteOrderQty   :
+       @parm newClientOrderId:自訂訂單id
+       @parm stopPrice       :
+       @parm icebergQty      :
+       @parm newOrderRespType:
+       @parm recvWindow      :
+    */
     public static String test_order_api(ArrayList<NameValuePair> pram) {
         String url = "https://api.binance.com/api/v3/order/test";
         HashMap<String, String> header = new HashMap<>();

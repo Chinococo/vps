@@ -36,7 +36,12 @@ public class App {
         pram.add(new BasicNameValuePair("timestamp", time));
         pram.add(new BasicNameValuePair("signature", function.sha256_HMAC_signture(build_signature_post_pram(pram), R.account.secretkey)));
         System.out.println(function.test_order_api(pram));
-        */
+
+         */
+
+
+
+
     }
 
     static String build_signature_post_pram(ArrayList<NameValuePair> pram) {

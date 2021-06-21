@@ -127,7 +127,10 @@ public class http_service {
                 System.out.println(pram.get(i).getName()+":"+pram.get(i).getValue());
 
             httpPost.setEntity(new UrlEncodedFormEntity(pram, HTTP.UTF_8));
-            httpPost.setHeader("X-MBX-APIKEY",apikey);
+            for(String key:header.keySet())
+            {
+                httpPost.setHeader(key,header.get(key));
+            }
 
             CloseableHttpResponse response = cilent.execute(httpPost);
             int state = response.getStatusLine().getStatusCode();
