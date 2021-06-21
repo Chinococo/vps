@@ -123,10 +123,21 @@ public class function {
         header.put("X-MBX-APIKEY", R.account.apikey);
         return new http_service(url, "POST", pram, "UTF-8", header).sync_POST();
     }
+    public static String get_listenkey()
+    {
+        HashMap<String, String> header = new HashMap<>();
+        header.put("Content-Type", "application/json");
+        header.put("X-MBX-APIKEY", R.account.apikey);
+        String listenkey = new http_service("https://api.binance.com/api/v3/userDataStream","GET",new ArrayList<NameValuePair>(),"UTF-8",header).sync_POST();
+        return new Gson().fromJson(listenkey, listn_key.class).listenKey;
+    }
 
 
     class timestamp {
         String serverTime;
+    }
+    class listn_key {
+        String listenKey;
     }
 
 }
