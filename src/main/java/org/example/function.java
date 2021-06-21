@@ -11,17 +11,17 @@ import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class function {
-
     /*
     製造簽名
     message = 加密訊息=傳送出去的參數
     secret = 密鑰
      */
-    public String sha256_HMAC_signture(String message, String secret)
-    {
+    public static String sha256_HMAC_signture(String message, String secret) {
         String hash = "";
         try {
             byte[] keyBytes = secret.getBytes(StandardCharsets.UTF_8.name()); // 把密鑰字串轉為byte[]
@@ -40,20 +40,18 @@ public class function {
     取得時間戳記
      */
 
-    public String get_timestamp()
-    {
-        http_service http_service = new http_service("https://api.binance.com/api/v1/time","GET");
-        timestamp t  = new Gson().fromJson(http_service.sync_GET(),timestamp.class);
+    public static String get_timestamp() {
+        http_service http_service = new http_service("https://api.binance.com/api/v1/time", "GET");
+        timestamp t = new Gson().fromJson(http_service.sync_GET(), timestamp.class);
         return t.serverTime;
     }
 
     /*
     取得交易訊息
      */
-    public String get_exchangeinfo()
-    {
+    public static String get_exchangeinfo() {
         String url = "https://api.binance.com/api/v3/exchangeInfo";
-        return new http_service(url,"GET").sync_GET();
+        return new http_service(url, "GET").sync_GET();
     }
 
     /*
@@ -61,13 +59,12 @@ public class function {
     Symol = 種類
     limit = 回傳項目上限
      */
-    public String get_recent_trades(String symbol,int limit)
-    {
+    public static String get_recent_trades(String symbol, int limit) {
         ArrayList<NameValuePair> pram = new ArrayList<>();
-        pram.add(new BasicNameValuePair("symbol",symbol));
-        pram.add(new BasicNameValuePair("limit",limit+""));
+        pram.add(new BasicNameValuePair("symbol", symbol));
+        pram.add(new BasicNameValuePair("limit", limit + ""));
         String url = "https://api.binance.com/api/v3/trades";
-        return new http_service(url,"GET",pram).sync_GET();
+        return new http_service(url, "GET", pram).sync_GET();
 
     }
 
@@ -79,30 +76,36 @@ public class function {
     endTime = 結束時間
     limit = 回傳項目上限
      */
-    public String get_kline(String symbol,String interval,long startTime,long endTime,int limit)
-    {
+    public static String get_kline(String symbol, String interval, long startTime, long endTime, int limit) {
         ArrayList<NameValuePair> pram = new ArrayList<>();
-        pram.add(new BasicNameValuePair("symbol",symbol));
-        pram.add(new BasicNameValuePair("interval",interval+""));
+        pram.add(new BasicNameValuePair("symbol", symbol));
+        pram.add(new BasicNameValuePair("interval", interval + ""));
         //pram.add(new BasicNameValuePair("symbol",startTime+""));
         //pram.add(new BasicNameValuePair("endTime",endTime+""));
-        pram.add(new BasicNameValuePair("limit",limit+""));
+        pram.add(new BasicNameValuePair("limit", limit + ""));
         String url = "https://api.binance.com/api/v3/klines";
-        return new http_service(url,"GET",pram).sync_GET();
+        return new http_service(url, "GET", pram).sync_GET();
 
     }
+
     /*
     取得現在價格
     */
-    public String get_price()
-    {
+    public static String get_price() {
         String url = "https://api.binance.com/api/v1/ticker/price";
-        return new http_service(url,"GET").sync_GET();
+        return new http_service(url, "GET").sync_GET();
+    }
+
+    public static String test_order_api(ArrayList<NameValuePair> pram) {
+        String url = "https://api.binance.com/api/v3/order/test";
+        HashMap<String, String> header = new HashMap<>();
+        header.put("Content-Type", "application/json");
+        header.put("X-MBX-APIKEY", R.account.apikey);
+        return new http_service(url, "POST", pram, "UTF-8", header).sync_POST();
     }
 
 
-    class timestamp
-    {
+    class timestamp {
         String serverTime;
     }
 

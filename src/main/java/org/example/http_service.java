@@ -31,6 +31,8 @@ import java.util.HashMap;
 import java.util.List;
 
 public class http_service {
+    public  String apikey="42ZTCxkOl9XrABHtOWCSYeBtmdKBTUqX0P6ixCKkM0zXUl2hGnLjfzuzcPGEou0E";
+    public  String secretkey="N4lAGy6ERR3MAWjeyTG964pS4mM8N6Jb5xOo2tFyKp4jOpe89A6jexQQqm68iM03";
     private String get_respond = null, url = null, melthod = null;
     private CloseableHttpClient cilent = null;
     private HttpEntity entity = null;
@@ -114,15 +116,22 @@ public class http_service {
     }
 
     public String sync_POST() {
+        System.out.println("\nconnect with url :"+url);
+        System.out.println("melthod by POST");
         BufferedReader in = null;
         try {
             cilent = HttpClientBuilder.create().build();
             HttpPost httpPost = new HttpPost(url);
-            for (String key : header.keySet())
-                httpPost.setHeader(key, header.get(key));
+            System.out.println("傳送參數");
+            for(int i=0;i<pram.size();i++)
+                System.out.println(pram.get(i).getName()+":"+pram.get(i).getValue());
+
             httpPost.setEntity(new UrlEncodedFormEntity(pram, HTTP.UTF_8));
+            httpPost.setHeader("X-MBX-APIKEY",apikey);
+
             CloseableHttpResponse response = cilent.execute(httpPost);
             int state = response.getStatusLine().getStatusCode();
+            System.out.println("status code = "+state);
             if (state == HttpStatus.SC_OK) {
                 in = new BufferedReader(new InputStreamReader(response.getEntity().getContent(), "UTF-8"));
                 StringBuffer sb = new StringBuffer("");
@@ -135,6 +144,7 @@ public class http_service {
                 return sb.toString();
             } else {
                 System.out.println("POST請求狀態碼：" + state);
+                System.out.println("錯誤回傳：" + EntityUtils.toString(response.getEntity()));
                 return null;
             }
         } catch (Exception e) {
