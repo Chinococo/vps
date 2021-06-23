@@ -28,9 +28,15 @@ public class simple_cilenet extends WebSocketClient {
 
     @Override
     public void onOpen(ServerHandshake handshakedata) {
-
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        websocket_command cmd = new websocket_command("LIST_SUBSCRIPTIONS",null,1);
+        send(cmd.build());
         System.out.println("opened connection");
-        // if you plan to refuse connection based on ip or httpfields overload: onWebsocketHandshakeReceivedAsClient
+
 
         timer1.schedule(new TimerTask() {
             @Override
@@ -38,7 +44,7 @@ public class simple_cilenet extends WebSocketClient {
               sendPing();
               System.out.println("ping "+new Date());
             }
-        },3000,3000);
+        },5000,3000);
 
         timer2.schedule(new TimerTask() {
             @Override
@@ -47,10 +53,6 @@ public class simple_cilenet extends WebSocketClient {
                 System.out.println("reconnect "+new Date());
             }
         },30000,30000);
-
-
-
-
     }
 
     @Override

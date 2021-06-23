@@ -35,17 +35,36 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class App {
-    public static void main(String[] args) throws IOException, URISyntaxException {
+    public static void main(String[] args) throws IOException, URISyntaxException, InterruptedException {
 
-        HashMap<String,Object> test = new HashMap<>();
-        websocket_command cmd = new websocket_command("LIST_SUBSCRIPTIONS",null,1);
-        System.out.println();
+        ArrayList<Object> test = new ArrayList<>();
+
+
+        //System.out.println();
 
 
         simple_cilenet c = new simple_cilenet(new URI("wss://stream.binance.com:9443/ws/btcusdt@Trade")); // more about drafts here: http://github.com/TooTallNate/Java-WebSocket/wiki/Drafts
         c.connect();
+        websocket_command cmd ;
 
 
+        Thread.sleep(1000);
+        test.add("btcusdt@Trade");
+        cmd = new websocket_command("UNSUBSCRIBE",test,1);
+        c.send(cmd.build());
+
+        //Thread.sleep(1000);
+        cmd = new websocket_command("LIST_SUBSCRIPTIONS",null,1);
+        c.send(cmd.build());
+
+
+        //Thread.sleep(1000);
+        cmd = new websocket_command("SUBSCRIBE",test,1);
+        c.send(cmd.build());
+
+        //Thread.sleep(1000);
+        cmd = new websocket_command("LIST_SUBSCRIPTIONS",null,1);
+        c.send(cmd.build());
 
 
 
