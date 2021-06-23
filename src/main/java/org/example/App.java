@@ -27,10 +27,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.http.WebSocket;
 import java.nio.ByteBuffer;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
@@ -38,33 +35,16 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class App {
-    final static CountDownLatch messageLatch = new CountDownLatch(1);
     public static void main(String[] args) throws IOException, URISyntaxException {
 
         HashMap<String,Object> test = new HashMap<>();
-        test.put("method","SUBSCRIBE");
-        ArrayList<String> data = new ArrayList<>();
-        data.add("btcusdt@aggTrade");
-        data.add("btcusdt@depth");
-        test.put("params",data);
-        test.put("id",1);
-        System.out.println(new JSONObject(test));
+        websocket_command cmd = new websocket_command("LIST_SUBSCRIPTIONS",null,1);
+        System.out.println();
 
 
-        simple_cilenet c = new simple_cilenet(new URI(
-                "wss://stream.binance.com:9443/ws/btcusdt@Trade")); // more about drafts here: http://github.com/TooTallNate/Java-WebSocket/wiki/Drafts
+        simple_cilenet c = new simple_cilenet(new URI("wss://stream.binance.com:9443/ws/btcusdt@Trade")); // more about drafts here: http://github.com/TooTallNate/Java-WebSocket/wiki/Drafts
         c.connect();
-        while(true)
-        {
-            Scanner scanner = new Scanner(System.in);
-            String input = scanner.next();
-            System.out.println(input);
-            if(input.equals("get"))
-            {
 
-                c.send(new JSONObject(test).toString());
-            }
-        }
 
 
 

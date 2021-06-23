@@ -5,9 +5,15 @@ import org.java_websocket.drafts.Draft;
 import org.java_websocket.handshake.ServerHandshake;
 
 import java.net.URI;
+import java.util.Date;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class simple_cilenet extends WebSocketClient {
+    Timer timer1 = new Timer();
+    Timer timer2 = new Timer();
+
     public simple_cilenet(URI serverUri, Draft draft) {
         super(serverUri, draft);
     }
@@ -22,20 +28,38 @@ public class simple_cilenet extends WebSocketClient {
 
     @Override
     public void onOpen(ServerHandshake handshakedata) {
-        /*
-        send("{\n" +
-                "\"method\": \"SUBSCRIBE\",\n" +
-                "\"params\":\n" +
-                "[\n" +
-                "\"btcusdt@aggTrade\",\n" +
-                "\"btcusdt@depth\"\n" +
-                "],\n" +
-                "\"id\": 1\n" +
-                "}");
 
-         */
         System.out.println("opened connection");
         // if you plan to refuse connection based on ip or httpfields overload: onWebsocketHandshakeReceivedAsClient
+
+        timer1.schedule(new TimerTask() {
+            @Override
+            public void run() {
+              sendPing();
+              System.out.println("ping "+new Date());
+            }
+        },3000,3000);
+
+        timer2.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                reconnect();
+                System.out.println("reconnect "+new Date());
+            }
+        },30000,30000);
+
+
+
+
+    }
+
+    @Override
+    public void reconnect() {
+        super.reconnect();
+        timer1.cancel();
+        timer2.cancel();
+        timer1=new Timer();
+        timer2=new Timer();
     }
 
     @Override
