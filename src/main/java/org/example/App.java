@@ -1,9 +1,28 @@
 package org.example;
 
+import com.alibaba.fastjson.JSONObject;
+import jakarta.websocket.ClientEndpoint;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
+import org.java_websocket.client.WebSocketClient;
+import org.java_websocket.server.WebSocketServer;
+import org.springframework.messaging.converter.MappingJackson2MessageConverter;
+import org.springframework.messaging.simp.stomp.StompCommand;
+import org.springframework.messaging.simp.stomp.StompHeaders;
+import org.springframework.messaging.simp.stomp.StompSession;
+import org.springframework.messaging.simp.stomp.StompSessionHandler;
+import org.springframework.util.ObjectUtils;
+import org.springframework.util.concurrent.ListenableFuture;
+import org.springframework.web.socket.WebSocketHandler;
+import org.springframework.web.socket.WebSocketHttpHeaders;
+import org.springframework.web.socket.WebSocketSession;
+import org.springframework.web.socket.client.standard.StandardWebSocketClient;
+import org.springframework.web.socket.messaging.WebSocketStompClient;
 
+import javax.websocket.*;
+import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.http.WebSocket;
@@ -11,12 +30,41 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Scanner;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class App {
-
+    final static CountDownLatch messageLatch = new CountDownLatch(1);
     public static void main(String[] args) throws IOException, URISyntaxException {
 
+        HashMap<String,Object> test = new HashMap<>();
+        test.put("method","SUBSCRIBE");
+        ArrayList<String> data = new ArrayList<>();
+        data.add("btcusdt@aggTrade");
+        data.add("btcusdt@depth");
+        test.put("params",data);
+        test.put("id",1);
+        System.out.println(new JSONObject(test));
+
+
+        simple_cilenet c = new simple_cilenet(new URI(
+                "wss://stream.binance.com:9443/ws/btcusdt@Trade")); // more about drafts here: http://github.com/TooTallNate/Java-WebSocket/wiki/Drafts
+        c.connect();
+        while(true)
+        {
+            Scanner scanner = new Scanner(System.in);
+            String input = scanner.next();
+            System.out.println(input);
+            if(input.equals("get"))
+            {
+
+                c.send(new JSONObject(test).toString());
+            }
+        }
 
 
 
@@ -25,7 +73,28 @@ public class App {
 
 
 
-      //ok//System.out.println(function.get_listenkey());
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        //ok//System.out.println(function.get_listenkey());
         //System.out.println(function.get_timestamp());
         //OK//System.out.println(function.sha256_HMAC_signture("symbol=LTCBTC&side=BUY&type=LIMIT&timeInForce=GTC&quantity=1&price=0.1&recvWindow=5000&timestamp=1499827319559","NhqPtmdSJYdKjVHjA7PZj4Mge3R5YNiP1e3UZjInClVN65XAbvqqM6A7H5fATj0j"));
         //OK//System.out.println(function.get_exchangeinfo());
@@ -59,7 +128,6 @@ public class App {
 
 
     }
-
     static String build_signature_post_pram(ArrayList<NameValuePair> pram) {
         String sb = "";
         if (pram == null)
@@ -73,6 +141,5 @@ public class App {
         }
         return sb;
     }
-
 
 }
